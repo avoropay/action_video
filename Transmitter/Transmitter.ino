@@ -56,6 +56,8 @@ SensorsStruct myData1;
 
 void setup()
 {
+    radioOutside.begin();
+
   // Setup the LCD
   myGLCD.InitLCD();
   myGLCD.clrScr();
@@ -103,7 +105,7 @@ void loop()
     pack_list[0].len = sizeof(myData);
     pack_list[0].type_pack = 'D'; // DTH
   //}
-  // radioOutside.sendOut(pack_list, sizeof(pack_list) / sizeof(pack_for_send));
+  radioOutside.sendOut(pack_list, sizeof(pack_list) / sizeof(pack_for_send));
 }
 
 
