@@ -1,4 +1,6 @@
 #include "RFoutside.h"
+#include "sensors.h"
+
 #include <UTFT.h>
 
 /*
@@ -35,21 +37,9 @@ const unsigned long interval_check = 4000; //ms
 
 pack_for_send pack_list[1];
 
-
-struct initSensorsStruct {
-  int Y_PIN;           // Потенциометр оси Y подключен к аналоговому входу
-  int X_PIN;           // Потенциометр оси X подключен к аналоговому входу
-  int BUTTON_PIN;
-};
-
 initSensorsStruct jFirst;
 initSensorsStruct jSecond;
 
-struct SensorsStruct {
-  int VRX;
-  int VRY;
-  boolean button;
-};
 
 SensorsStruct myData;
 SensorsStruct myData1;
