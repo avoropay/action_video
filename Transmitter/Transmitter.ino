@@ -3,7 +3,7 @@
 
 #include <UTFT.h>
 
-/*
+/* RF
   GND - VCC
   CE(48)  - CSN(53)
   SCK(52) - MOSI(51)
@@ -83,7 +83,7 @@ void loop()
       myData[itemJoysticks] = joysticks[itemJoysticks]->SensorsStatus;
       pack_list[jChanged].buf = &myData[itemJoysticks];
       pack_list[jChanged].len = sizeof(SensorsStruct);
-      pack_list[jChanged].type_pack = itemJoysticks;
+      pack_list[jChanged].type_pack = '0'+itemJoysticks;
       joysticks[itemJoysticks]->isChanged = false;
       jChanged++;
     }
@@ -97,14 +97,19 @@ void loop()
   myGLCD.print("VRX:", LEFT, 0);
   myGLCD.print("VRY:", RIGHT, 0);
   uint8_t  FontXsize = myGLCD.getFontXsize();
+  uint8_t  FontYsize = myGLCD.getFontXsize();
 
 
   for (byte itemJoysticks = 0; itemJoysticks < joystick_counts; itemJoysticks++) {
     uint8_t xPos = (FontXsize * (itemJoysticks + 2) + (itemJoysticks + 2) * 3);
+    uint8_t yPos = FontYsize * 7;
 
     myGLCD.printNumI(joysticks[itemJoysticks]->SensorsStatus.VRX, LEFT, xPos,  6, ' ');
     myGLCD.printNumI(joysticks[itemJoysticks]->SensorsStatus.VRY, RIGHT, xPos,  6, ' ');
-  }
+
+    myGLCD.printNumI(joysticks[itemJoysticks]->SensorsStatus.directionX, yPos   , xPos,  1, ' ');
+    myGLCD.printNumI(joysticks[itemJoysticks]->SensorsStatus.directionY, yPos + FontYsize*2 , xPos,  1, ' ');
+}
 }
 
 

@@ -37,7 +37,7 @@ void hyperbolicSpeedChange::countSteps(int deltaSpeed) {
 };
 
 int hyperbolicSpeedChange::getNextSpeed() {
-  currentSpeed
-  return quotientSpeed * pow(currentTime,2);
+  currentSpeed = quotientSpeed * pow(currentTime,2);
+  return currentSpeed;
 };
 

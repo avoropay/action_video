@@ -22,13 +22,13 @@
 struct initSensorsStruct {
   int Y_PIN;           // Потенциометр оси Y подключен к аналоговому входу
   int X_PIN;           // Потенциометр оси X подключен к аналоговому входу
-  int BUTTON_PIN , directionX, directionY;
+  int BUTTON_PIN;
 };
 
 struct SensorsStruct {
   int VRX;
   int VRY;
-  boolean button;
+  boolean button , directionX, directionY;
 };
 
 struct RF24NetworkHeaderL

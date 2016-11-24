@@ -59,9 +59,9 @@ void RFoutside::sendOut(const pack_for_send buf[], uint8_t lenArray) {
 
 
   unsigned long now = millis();              // If it's time to send a message, send it!
-  if ( now - last_sent >= interval  )
+  /*if ( now - last_sent >= interval  )
   {
-    last_sent = now;
+    last_sent = now;*/
 
     for (byte itemBuf = 0; itemBuf < lenArray; itemBuf++) {
 
@@ -74,7 +74,7 @@ void RFoutside::sendOut(const pack_for_send buf[], uint8_t lenArray) {
       else
         Serial.println("failed.");
     }
-  }
+  //}
 }
 
 
