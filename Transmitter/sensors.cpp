@@ -33,23 +33,25 @@ boolean Sensors::begin() {
 
 void Sensors::getSensors() {
   boolean directionX, directionY;
-  int vrX = analogRead(_initSensors.X_PIN);
-  int vrY = analogRead(_initSensors.Y_PIN);
-  if (vrX > _initSensors.zMax) {
-    vrX = map(vrX - 512, 0, 512, 0, _initSensors.maxMap);
+  vrXa = analogRead(_initSensors.X_PIN);
+  vrYa = analogRead(_initSensors.Y_PIN);
+  int vrX;
+  int vrY;
+  if (vrXa > _initSensors.zMax) {
+    vrX = map(vrXa - 512, 0, 512, 0, _initSensors.maxMap);
     directionX = false;
-  } else if (vrX < _initSensors.zMin) {
-    vrX = map(512 - vrX, 0, 512, 0, _initSensors.maxMap);
+  } else if (vrXa < _initSensors.zMin) {
+    vrX = map(512 - vrXa, 0, 512, 0, _initSensors.maxMap);
     directionX = true;
   } else {
     vrX   = 0;
   }
 
-  if (vrY > _initSensors.zMax) {
-    vrY = map(vrY - 512, 0, 512, 0, _initSensors.maxMap);
+  if (vrYa > _initSensors.zMax) {
+    vrY = map(vrYa - 512, 0, 512, 0, _initSensors.maxMap);
     directionY = false;
-  } else if (vrY < _initSensors.zMin) {
-    vrY = map(512 - vrY, 0, 512, 0, _initSensors.maxMap);
+  } else if (vrYa < _initSensors.zMin) {
+    vrY = map(512 - vrYa, 0, 512, 0, _initSensors.maxMap);
     directionY = true;
   } else {
     vrY   = 0;

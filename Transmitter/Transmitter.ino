@@ -50,9 +50,9 @@ void setup()
 {
   radioOutside.begin();
   joysticks[0] = new Sensors(A4, A5, 4, 500, 522, 1000);
-  joysticks[1] = new Sensors(A6, A7, 5, 500, 530, 1000);
-  joysticks[2] = new Sensors(A8, A9, 6, 500, 522, 1000);
-  joysticks[3] = new Sensors(A10, A11, 6, 500, 522, 1000);
+  joysticks[1] = new Sensors(A6, A7, 5, 500, 533, 1000);
+  joysticks[2] = new Sensors(A8, A9, 6, 518, 530, 1000);
+  joysticks[3] = new Sensors(A10, A11, 7, 490, 508, 1000);
 
   for (byte itemJoysticks = 0; itemJoysticks < joystick_counts; itemJoysticks++) {
     joysticks[itemJoysticks]->begin();
@@ -106,6 +106,14 @@ void loop()
 
     myGLCD.printNumI(joysticks[itemJoysticks]->SensorsStatus.VRX, LEFT, xPos,  6, ' ');
     myGLCD.printNumI(joysticks[itemJoysticks]->SensorsStatus.VRY, RIGHT, xPos,  6, ' ');
+
+    Serial.print(F("VRX "));
+
+    Serial.print(joysticks[itemJoysticks]->vrXa);
+
+    Serial.print(F(" VRY "));
+    Serial.print(joysticks[itemJoysticks]->vrYa);
+    Serial.println(F(""));
 
     myGLCD.printNumI(joysticks[itemJoysticks]->SensorsStatus.directionX, yPos   , xPos,  1, ' ');
     myGLCD.printNumI(joysticks[itemJoysticks]->SensorsStatus.directionY, yPos + FontYsize*2 , xPos,  1, ' ');

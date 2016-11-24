@@ -34,8 +34,9 @@ struct SensorsStruct {
 
 class Sensors {
   initSensorsStruct _initSensors;
-   
  public:
+  int vrXa;
+  int vrYa;
   SensorsStruct SensorsStatus;
   bool isChanged;
   Sensors(int vY_PIN, int vX_PIN, int vBUTTON_PIN, int vzMin, int vzMax, int vmaxMap);
