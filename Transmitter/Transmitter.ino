@@ -49,10 +49,10 @@ int jChanged = 0;
 void setup()
 {
   radioOutside.begin();
-  joysticks[0] = new Sensors(A4, A5, 4);
-  joysticks[1] = new Sensors(A6, A7, 5);
-  joysticks[2] = new Sensors(A8, A9, 6);
-  joysticks[3] = new Sensors(A10, A11, 6);
+  joysticks[0] = new Sensors(A4, A5, 4, 500, 522, 1000);
+  joysticks[1] = new Sensors(A6, A7, 5, 500, 530, 1000);
+  joysticks[2] = new Sensors(A8, A9, 6, 500, 522, 1000);
+  joysticks[3] = new Sensors(A10, A11, 6, 500, 522, 1000);
 
   for (byte itemJoysticks = 0; itemJoysticks < joystick_counts; itemJoysticks++) {
     joysticks[itemJoysticks]->begin();
@@ -84,6 +84,7 @@ void loop()
       pack_list[jChanged].buf = &myData[itemJoysticks];
       pack_list[jChanged].len = sizeof(SensorsStruct);
       pack_list[jChanged].type_pack = itemJoysticks;
+      joysticks[itemJoysticks]->isChanged = false;
       jChanged++;
     }
   }
