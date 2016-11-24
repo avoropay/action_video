@@ -24,6 +24,7 @@ hyperbolicSpeedChange::hyperbolicSpeedChange(int vmaxTime, int vmaxSteps, int vm
 };
 
 boolean hyperbolicSpeedChange::begin(int newSpeed) {
+  newSpeed = newSpeed;
   quotientSpeed = (currentSpeed - newSpeed) / pow(maxTime, 2);
   countSteps(currentSpeed - newSpeed);
   currentTime = deltaStep;
@@ -36,6 +37,7 @@ void hyperbolicSpeedChange::countSteps(int deltaSpeed) {
 };
 
 int hyperbolicSpeedChange::getNextSpeed() {
+  currentSpeed
   return quotientSpeed * pow(currentTime,2);
 };
 

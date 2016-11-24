@@ -28,6 +28,7 @@ class hyperbolicSpeedChange {
   int deltaStep;
   int quotientSpeed;
   int currentSpeed;
+  int newSpeed;
   int currentTime;
   boolean hyperbolicSpeedChange::begin(int newSpeed);
   void countSteps(int deltaSpeed);
