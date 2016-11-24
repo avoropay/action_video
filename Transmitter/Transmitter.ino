@@ -35,18 +35,28 @@ int firststart = 1;
 unsigned long last_chack_sensors = 0;
 const unsigned long interval_check = 4000; //ms
 
-pack_for_send pack_list[1];
 
-initSensorsStruct jFirst;
-initSensorsStruct jSecond;
+/*  joysticks array */
+const int joystick_counts = 4;
+Sensors* joysticks[joystick_counts];
 
+SensorsStruct myData[joystick_counts];
 
-SensorsStruct myData;
-SensorsStruct myData1;
+pack_for_send pack_list[4];
+
+int jChanged = 0;
 
 void setup()
 {
-    radioOutside.begin();
+  radioOutside.begin();
+  joysticks[0] = new Sensors(A4, A5, 4);
+  joysticks[1] = new Sensors(A6, A7, 5);
+  joysticks[2] = new Sensors(A8, A9, 6);
+  joysticks[3] = new Sensors(A10, A11, 6);
+
+  for (byte itemJoysticks = 0; itemJoysticks < joystick_counts; itemJoysticks++) {
+    joysticks[itemJoysticks]->begin();
+  }
 
   // Setup the LCD
   myGLCD.InitLCD();
@@ -56,10 +66,6 @@ void setup()
 
   Serial.begin(9600);
   Serial.println(F(""));
-  jFirst.Y_PIN = 4;
-  jFirst.X_PIN = 5;
-  jSecond.Y_PIN = 6;
-  jSecond.X_PIN = 7;
 }
 
 void loop()
@@ -68,34 +74,36 @@ void loop()
     myGLCD.clrScr();
     firststart = false;
   }
-  myData.VRY = analogRead(jFirst.Y_PIN);   // Задаем переменную yVal для считывания показаний аналогового значения
-  myData.VRX = analogRead(jFirst.X_PIN);
-  //myData.button = digitalRead(BUTTON_PIN);  // Считываем не было ли нажатия на джойстик
 
-  myData1.VRY = analogRead(jSecond.Y_PIN);  
-  myData1.VRX = analogRead(jSecond.X_PIN);
-  //myData.button = digitalRead(BUTTON_PIN);
+  jChanged = 0;
 
-  unsigned long now = millis();              // If it's time to send a message, send it!
-  /*if ( now - last_chack_sensors >= interval_check  )
-  {
-    last_chack_sensors = now;
-    */myGLCD.setColor(VGA_WHITE);
+  for (byte itemJoysticks = 0; itemJoysticks < joystick_counts; itemJoysticks++) {
+    joysticks[itemJoysticks]->getSensors();
+    if (joysticks[itemJoysticks]->isChanged) {
+      myData[itemJoysticks] = joysticks[itemJoysticks]->SensorsStatus;
+      pack_list[jChanged].buf = &myData[itemJoysticks];
+      pack_list[jChanged].len = sizeof(SensorsStruct);
+      pack_list[jChanged].type_pack = itemJoysticks;
+      jChanged++;
+    }
+  }
 
-    myGLCD.setFont(SmallFont);
-    myGLCD.print("VRX:", LEFT, 0);
-    myGLCD.print("VRY:", RIGHT, 0);
-    myGLCD.printNumI(myData.VRX, LEFT, 14,  6, ' ');
-    myGLCD.printNumI(myData.VRY, RIGHT, 14,  6, ' ');
+  radioOutside.sendOut(pack_list, jChanged);
 
-    myGLCD.printNumI(myData1.VRX, LEFT, 30,  6, ' ');
-    myGLCD.printNumI(myData1.VRY, RIGHT, 30,  6, ' ');
+  myGLCD.setColor(VGA_WHITE);
 
-    pack_list[0].buf = &myData;
-    pack_list[0].len = sizeof(myData);
-    pack_list[0].type_pack = 'D'; // DTH
-  //}
-  radioOutside.sendOut(pack_list, sizeof(pack_list) / sizeof(pack_for_send));
+  myGLCD.setFont(SmallFont);
+  myGLCD.print("VRX:", LEFT, 0);
+  myGLCD.print("VRY:", RIGHT, 0);
+  uint8_t  FontXsize = myGLCD.getFontXsize();
+
+
+  for (byte itemJoysticks = 0; itemJoysticks < joystick_counts; itemJoysticks++) {
+    uint8_t xPos = (FontXsize * (itemJoysticks + 2) + (itemJoysticks + 2) * 3);
+
+    myGLCD.printNumI(joysticks[itemJoysticks]->SensorsStatus.VRX, LEFT, xPos,  6, ' ');
+    myGLCD.printNumI(joysticks[itemJoysticks]->SensorsStatus.VRY, RIGHT, xPos,  6, ' ');
+  }
 }
 
 

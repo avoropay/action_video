@@ -32,14 +32,14 @@ struct SensorsStruct {
 };
 
 class Sensors {
+  initSensorsStruct _initSensors;
+   
  public:
-  /*float ppmCZ, ppmZ;
-  queue pppZQueue = queue(200);
-  queue pppCZQueue = queue(200);*/
-
-  Sensors(void);
+  SensorsStruct SensorsStatus;
+  bool isChanged;
+  Sensors(int vY_PIN, int vX_PIN, int vBUTTON_PIN);
   boolean begin();
-  void getSensors(SensorsStruct* buf);
+  void getSensors();
 };
 
 #endif
