@@ -42,9 +42,29 @@ const unsigned long interval_read = 4000; //ms  // How often to send 'hello worl
 
 unsigned long last_read;             // When did we last send?
 
-volatile  int VRX;
-volatile  int VRY;
-volatile  boolean IRQ_rx;
+volatile  int VRX_048;
+volatile  int VRY_048;
+volatile  boolean IRQ_rx_048;
+volatile  boolean DIR_x_048;
+volatile  boolean DIR_y_048;
+
+volatile  int VRX_049;
+volatile  int VRY_049;
+volatile  boolean IRQ_rx_049;
+volatile  boolean DIR_x_049;
+volatile  boolean DIR_y_049;
+
+volatile  int VRX_050;
+volatile  int VRY_050;
+volatile  boolean IRQ_rx_050;
+volatile  boolean DIR_x_050;
+volatile  boolean DIR_y_050;
+
+volatile  int VRX_051;
+volatile  int VRY_051;
+volatile  boolean IRQ_rx_051;
+volatile  boolean DIR_x_051;
+volatile  boolean DIR_y_051;
 
 typedef enum { wdt_16ms = 0, wdt_32ms, wdt_64ms, wdt_128ms, wdt_250ms, wdt_500ms, wdt_1s, wdt_2s, wdt_4s, wdt_8s } wdt_prescalar_e;
 
@@ -59,14 +79,18 @@ void check_radio(void)                                // Receiver role: Does not
 
   bool tx, fail, rx;
 
-  IRQ_rx = false;
-
+  IRQ_rx_048 = false;
+  IRQ_rx_049 = false;
+  IRQ_rx_050 = false;
+  IRQ_rx_051 = false;
+  
   radio.whatHappened(tx, fail, rx);                   // What happened?
 
   //Serial.println(F("All the work is in IRQ"));
   // If data is available, handle it accordingly
   if ( rx ) {
-    IRQ_rx = true;
+    
+    
     if (radio.getDynamicPayloadSize() < 1) {
       // Corrupt payload has been flushed
       Serial.println(F("Corrupt payload has been flushed"));
@@ -77,30 +101,47 @@ void check_radio(void)                                // Receiver role: Does not
     // Read in the data
     uint8_t received;
     radio.read(&myTempDTHData, sizeof(myTempDTHData));
-    //myDTHHumidity = myTempDTHData.myDTHHumidity;
-    //myDTHTemperature = myTempDTHData.myDTHTemperature;
-    VRX = myTempDTHData.sensor.VRX;
-    VRY = myTempDTHData.sensor.VRY;
+    
+    switch (myTempDTHData.header.type) {
+      case 48 :
+        VRX_048 = myTempDTHData.sensor.VRX;
+        VRY_048 = myTempDTHData.sensor.VRY;
+        DIR_y_048 = myTempDTHData.sensor.directionY;
+        DIR_x_048 = myTempDTHData.sensor.directionX;
+        
+        IRQ_rx_048 = true;
+        break;
+      case 49 :
+        VRX_049 = myTempDTHData.sensor.VRX;
+        VRY_049 = myTempDTHData.sensor.VRY;
+        DIR_y_049 = myTempDTHData.sensor.directionY;
+        DIR_x_049 = myTempDTHData.sensor.directionX;
+        
+        IRQ_rx_049 = true;
+        break;
+      case 50 :
+        VRX_050 = myTempDTHData.sensor.VRX;
+        VRY_050 = myTempDTHData.sensor.VRY;
+        DIR_y_050 = myTempDTHData.sensor.directionY;
+        DIR_x_050 = myTempDTHData.sensor.directionX;
+        
+        IRQ_rx_050 = true;
+        break;
+      case 51 :
+        VRX_051 = myTempDTHData.sensor.VRX;
+        VRY_051 = myTempDTHData.sensor.VRY;
+        DIR_y_051 = myTempDTHData.sensor.directionY;
+        DIR_x_051 = myTempDTHData.sensor.directionX;
+        
+        IRQ_rx_051 = true;
+        break;
+    }
+
     Serial.print(F("ID: "));
     Serial.print(myTempDTHData.header.id);
     Serial.print(F(" Type: "));
     Serial.print(sprintf("%c ", myTempDTHData.header.type));
     Serial.print(myTempDTHData.header.type);
-    switch (myTempDTHData.header.type)
-    {
-      case 'G':
-        Serial.print(F("G"));
-        break;
-      case 'T':
-        Serial.print(F("T"));
-        break;
-      case 'D':
-        Serial.print(F("(D)"));
-        break;
-      default:
-        // Anything else is unexpected, and ergo a test failure
-        break;
-    };
     Serial.print(F(" VRX: "));
     Serial.print(myTempDTHData.sensor.VRX);
     Serial.print(F(" VRY: "));
