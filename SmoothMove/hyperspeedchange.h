@@ -30,8 +30,9 @@ class hyperbolicSpeedChange {
   int currentSpeed;
   int newSpeed;
   int currentTime;
+  boolean NewDirection;
   boolean SpeedDirection;
-  boolean hyperbolicSpeedChange::begin(int newSpeed);
+  boolean hyperbolicSpeedChange::begin(int newSpeed, boolean newSpeedDirection);
   void countSteps(int deltaSpeed);
   int getNextSpeed();
   
