@@ -127,7 +127,7 @@ void check_radio(void)                                // Receiver role: Does not
         
         IRQ_rx_050 = true;
         break;
-      case 51 :
+      case 151 :
         VRX_051 = myTempDTHData.sensor.VRX;
         VRY_051 = myTempDTHData.sensor.VRY;
         DIR_y_051 = myTempDTHData.sensor.directionY;
