@@ -112,20 +112,26 @@ void loop()
   
   if(useSmooth){
     long currTime = millis();
-    if(currTime > prevTime + smoothDelay){
+    if(currTime > prevTime + smoothDelay){ // check time for one step speed up
       prevTime = currTime;
-      if(upTrueOrDownFalse){
-        if(currentSpeed + accel > goalSpeed){
+      if(upTrueOrDownFalse){ // check is we need increase or reduce speed
+        if(currentSpeed + accel > goalSpeed){ // is we steel need apply smooth
           currentSpeed += accel;
           stepper2.setSpeed(currentSpeed);
+        }else if(currentSpeed == goalSpeed){ // when we arrive goal speed turn off smoothing and next time we will keep the same speed
+          useSmooth = false;
         }
       }else{
         if(currentSpeed - accel > goalSpeed){
           currentSpeed -= accel;
           stepper2.setSpeed(currentSpeed);
+        }else if(currentSpeed == goalSpeed){
+          useSmooth = false;
         }
       }
     }
+  }else{ // keep the same speed
+    stepper2.setSpeed(currentSpeed);
   }
   
   if (IRQ_rx_049) {
@@ -135,9 +141,9 @@ void loop()
     IRQ_rx_049 = false;
     
     if(mSpeed > currentSpeed){
-      currentSpeed += accel
+      currentSpeed += accel; // increase speed + 1 step of speed
       goalSpeed = mSpeed;
-      useSmooth = true;
+      useSmooth = true; // switch on smoothing
       upTrueOrDownFalse = true;
     }else if(mSpeed < currentSpeed){
       currentSpeed -= accel;
