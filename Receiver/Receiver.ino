@@ -102,12 +102,51 @@ void loop()
     stepper1.setDirection(DIR_y_048);
   }
 
+  int currentSpeed = 0;
+  int goalSpeed = 0;
+  int accel = 10;
+  bool useSmooth = false;
+  long prevTime = 0;
+  long smoothDelay = 100;
+  bool upTrueOrDownFalse = true;
+  
+  if(useSmooth){
+    long currTime = millis();
+    if(currTime > prevTime + smoothDelay){
+      prevTime = currTime;
+      if(upTrueOrDownFalse){
+        if(currentSpeed + accel > goalSpeed){
+          currentSpeed += accel;
+          stepper2.setSpeed(currentSpeed);
+        }
+      }else{
+        if(currentSpeed - accel > goalSpeed){
+          currentSpeed -= accel;
+          stepper2.setSpeed(currentSpeed);
+        }
+      }
+    }
+  }
+  
   if (IRQ_rx_049) {
-    ////myOLED.printNumI(VRY_049, RIGHT, 20);
-    //myOLED.printNumI(VRX_049, LEFT, 20);
+    
+    int mSpeed = IRQ_rx_049;
+    
     IRQ_rx_049 = false;
     
-    stepper2.setSpeed(VRY_049 * 3);
+    if(mSpeed > currentSpeed){
+      currentSpeed += accel
+      goalSpeed = mSpeed;
+      useSmooth = true;
+      upTrueOrDownFalse = true;
+    }else if(mSpeed < currentSpeed){
+      currentSpeed -= accel;
+      goalSpeed = mSpeed;
+      useSmooth = true;
+      upTrueOrDownFalse = false;
+    }
+    
+    stepper2.setSpeed(currentSpeed);
     stepper2.setDirection(DIR_y_049);
   }
 
