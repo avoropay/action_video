@@ -49,10 +49,10 @@ int jChanged = 0;
 void setup()
 {
   radioOutside.begin();
-  joysticks[0] = new Sensors(A4, A8, 4, 512, 542, 500);
-  joysticks[1] = new Sensors(A5, A9, 5, 490, 522, 500);
-  joysticks[2] = new Sensors(A6, A10, 6, 512, 712, 1000);
-  joysticks[3] = new Sensors(A7, A11, 6, 490, 512, 1000);
+  joysticks[0] = new Sensors(A4, A5, 4, 490, 542, 2000);
+  //joysticks[1] = new Sensors(A5, A9, 5, 490, 522, 500);
+  //joysticks[2] = new Sensors(A6, A10, 6, 512, 712, 1000);
+  //joysticks[3] = new Sensors(A7, A11, 6, 490, 512, 1000);
 
   for (byte itemJoysticks = 0; itemJoysticks < joystick_counts; itemJoysticks++) {
     joysticks[itemJoysticks]->begin();
